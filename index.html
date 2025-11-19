@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ronny :,3</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        
+        /* Botón de la carta */
+        #letter-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        #letter-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Modal de la carta */
+        #modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: none; /* Oculto por defecto */
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        #letter-content {
+            background: rgba(20, 25, 35, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: #e0e0e0;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        /* Estilos del texto de la carta */
+        h2 {
+            color: #ff9999;
+            margin-top: 0;
+            font-weight: 400;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        p {
+            line-height: 1.7;
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: #cccccc;
+            white-space: pre-line; /* Respeta saltos de línea */
+        }
+        .highlight {
+            color: #fff;
+            font-weight: 500;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close-btn:hover {
+            color: white;
+        }
+
+        /* Scrollbar bonito para la carta */
+        #letter-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        #letter-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        #letter-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Botón para abrir la carta -->
+<button id="letter-btn">
+    <span>💌</span> Leer carta
+</button>
+
+<!-- Modal de la Carta -->
+<div id="modal-overlay">
+    <div id="letter-content">
+        <button class="close-btn">&times;</button>
+        <h2>Hola Pololín, mi corazón de melón...</h2>
+        
+        <p>Estos meses han sido difíciles. No puedo borrar mis recuerdos, pero creamos nuevos. No puedo ocultar mi miedo y soy torpe comunicándolo. Lo que más quiero es estar cerca, el verte y que me veas. Sí me importa cómo te sientes, pero el callarme no es la solución; ambos tocamos heridas del otro, las llagas... y está siendo difícil cuidarnos. Así que estoy planeando algo para los dos.</p>
+        
+        <p>Valoro todos estos cambios que estás haciendo y la nueva persona en la que te estás convirtiendo. Te amo con todo mi corazón y aún tengo confianza, aún insisto, aún me quedo. No sabes cómo... La asertividad a veces no es mi fuerte, sobre todo cuando la reacción es automática, cuando recién estoy expresando mi miedo y frustración.</p>
+
+        <p>Ya estoy en clases. Cuando te solté un poco, me di cuenta del bello mundo que me rodea, de que podía disfrutarlo... y pude verte también. Sí me importa cómo te sientes. Sé que no te gusta que te diga las cosas así, sé que lastima. Pero así como te leo entre líneas, también léeme entre líneas a mí. No intento atacarte; sé que cuando me dices que no me puedes decir qué necesitas, no es un ataque hacia mí, sino que realmente no está siendo un espacio seguro... y lo entiendo. Pero me esforzaré para que sí sea un espacio seguro sin desaparecer.</p>
+
+        <p>Ya te dije las razones por las que estoy contigo. Más allá del cariño, es la confianza de ser un equipo. Tengo la ilusión y el sueño que seas tú. Eres alguien de quien me siento <span class="highlight">ORGULLOSA</span> de ser su pareja y de compartir contigo. No sabes cuánto te admiro y solo podría estar con alguien que admiro. Tú tocaste fibras en mí que no quiero decir que te pertenecen, pero están ahora ligadas a tu presencia, y ahora quiero compartirlas contigo.</p>
+
+        <p>El hecho de que compartas arte me alegra, y me da un poco de celos y curiosidad. El hecho del video de ayer... no lo vi completo, mi amor, pero sentí que culpaba. ¿Quieres hablar? No me gustó que me dejes ayer, de verdad, pero te veo y entiendo. Sin embargo, no lo acepto: cuando algo nos sobrepasa podemos darnos espacio con amor, y no así. Tengo miedo de que no vuelvas... te esperé un rato más... y confirmé que no volverías... no sé cómo explicarte la tristeza.</p>
+
+        <p>Y el hecho de que me digas que tengo que entender cómo te sientes olvidándome de cómo yo me siento, de no poder comunicar nada porque te sientes mal, me pone triste. Y sí... antes pensaba y evitaba y cuidaba cada palabra, cada movimiento porque no quería lastimarte... y aun así te lastimaba, y aun así te frustrabas, y aun así te ibas. Y ahora que tengo el miedo peor, ya lo comunico. Te haces como chiquito, y quiero cuidarte sin olvidarme de mí. Si necesitas algo, si sientes dudas, tú puedes preguntar.</p>
+
+        <p>Te quiero Ronny. Amo tu sonido, y sé que tienes un corazón dulce y fuerte. Me esfuerzo porque lo vale, pero ya no me haré pequeña, nada más. Ahora tengo algo más, mi vida la quiero compartir y no quiero temer. Me asustan los reproches... no porque haga todo correcto, sino porque generan culpa. Te asusta que te diga lo que siento porque se siente a reproche, y no lo es.</p>
+
+        <p>¿Qué hicimos? ¿Qué somos? Ya no es igual, la historia está y solo se repara con presencia, con constancia. Si bien yo me encargaré de mis heridas, sanaría en distancia, pero te quiero conmigo. Tú tenías miedo de que encuentre a alguien más, y yo de perderme sueños contigo. Ahora que tu violín es el latido que me da vida muchas veces... Tu sensibilidad con los detalles, tu percepción del mundo, tu claridad y responsabilidad, nuestro trabajo para ser más responsables.</p>
+
+        <p>Amo tu sonrisa loca, tus ojitos chispeantes. Y actualmente tu mirada triste me pone también triste; quiero hacerte sentir que te veo. Si esta mañana no te escuché, pero tampoco querías decir nada, comuniquémonos. Te has esforzado, y creo que estoy encimándome, y no está bien, te doy el espacio. Te amo, te quiero y soñar contigo es la vida que quiero contigo. Que viajemos, que seas tú. Sanemos please, me importas.</p>
+
+        <p>Me recuerdas a cuando tenías miedo de decirme las cosas por miedo a ser tóxico... ¿te acuerdas? Al final te di espacio... es algo similar. Recuerdo las cosas buenas, te recuerdo. Amo tus detalles locazos, tus temas, tus conversaciones, amo poder pensar contigo.</p>
+
+        <p class="highlight" style="border-left: 3px solid #ff5555; padding-left: 15px; color: #ffcccc;">Por último, ten en cuenta esto: El hecho de que esté molesta contigo y me hayas lastimado ayer y mucho tiempo atrás, NO quita el hecho de que te aprecio ni condiciona mi cariño. Si bien quizá tomaré un poco más de distancia, no quiere decir que te odio. Estoy molesta, y ahí es el momento de cuidado. No por estar molesta estoy pensando lo peor; elijo canalizar la ira, el sentimiento, a algo bueno y procesarlo, y recordarte lo mucho que te aprecio, aunque necesite mi espacio para sanar.</p>
+    </div>
+</div>
+
+<canvas id="aquarium"></canvas>
+
+<script>
+    const canvas = document.getElementById('aquarium');
+    const ctx = canvas.getContext('2d');
+
+    // --- LÓGICA DEL MODAL DE LA CARTA ---
+    const modal = document.getElementById('modal-overlay');
+    const letterContent = document.getElementById('letter-content');
+    const btn = document.getElementById('letter-btn');
+    const closeBtn = document.querySelector('.close-btn');
+
+    btn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        // Pequeño delay para la animación de opacidad
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            letterContent.style.transform = 'translateY(0)';
+        }, 10);
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    
+    // Cerrar si se hace click fuera del contenido
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    function closeModal() {
+        modal.style.opacity = '0';
+        letterContent.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 400);
+    }
+
+    // --- LÓGICA DE LA PECERA (ANIMACIÓN) ---
+
+    let width, height;
+    let time = 0;
+
+    const flakes = [];
+    const bubbles = [];
+    const fishes = [];
+    const shrimps = [];
+    
+    let plants = {
+        vallisneria: [],
+        montecarlo: [],
+        ludwigia: [],
+        anubias: []
+    };
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        initPlants();
+    }
+
+    window.addEventListener('resize', resize);
+
+    // CLASES
+    class Fish {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * (height - 150);
+            this.size = 20 + Math.random() * 15;
+            this.speed = 0.5 + Math.random() * 1.5;
+            this.vx = Math.random() < 0.5 ? this.speed : -this.speed;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.color = Math.random() > 0.5 ? '#E0E0E0' : '#333'; 
+            this.stripeColor = '#111';
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy + Math.sin(time * 0.05 + this.x) * 0.2;
+
+            if (this.x < -50) { this.vx = Math.abs(this.vx); this.vy = (Math.random() - 0.5); }
+            if (this.x > width + 50) { this.vx = -Math.abs(this.vx); this.vy = (Math.random() - 0.5); }
+            if (this.y < 50) this.vy = Math.abs(this.vy);
+            if (this.y > height - 100) this.vy = -Math.abs(this.vy);
+
+            // Perseguir comida
+            if (flakes.length > 0) {
+                let closest = null, minDist = 200;
+                flakes.forEach((flake, index) => {
+                    const dx = flake.x - this.x;
+                    const dy = flake.y - this.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < minDist) { minDist = dist; closest = index; }
+                });
+                if (closest !== null) {
+                    const food = flakes[closest];
+                    if (food.x > this.x) this.vx += 0.05; else this.vx -= 0.05;
+                    if (food.y > this.y) this.vy += 0.05; else this.vy -= 0.05;
+                    if (minDist < 20) flakes.splice(closest, 1);
+                }
+            }
+            // Limite velocidad
+            if (this.vx > 3) this.vx = 3;
+            if (this.vx < -3) this.vx = -3;
+        }
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            if (this.vx < 0) ctx.scale(-1, 1);
+            // Cuerpo
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.moveTo(0, -this.size);
+            ctx.lineTo(this.size, 0);
+            ctx.lineTo(0, this.size);
+            ctx.lineTo(-this.size/2, 0);
+            ctx.closePath();
+            ctx.fill();
+            // Rayas
+            if (this.color === '#E0E0E0') {
+                ctx.strokeStyle = this.stripeColor;
+                ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(0, -this.size + 5); ctx.lineTo(0, this.size - 5); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(this.size/2, -5); ctx.lineTo(this.size/2, 5); ctx.stroke();
+            }
+            // Cola
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.moveTo(-this.size/2, 0);
+            ctx.lineTo(-this.size, -this.size/3);
+            ctx.lineTo(-this.size, this.size/3);
+            ctx.fill();
+            // Ojo
+            ctx.fillStyle = 'white';
+            ctx.beginPath(); ctx.arc(this.size/2, -5, 3, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = 'black';
+            ctx.beginPath(); ctx.arc(this.size/2, -5, 1.5, 0, Math.PI*2); ctx.fill();
+            // Aleta pectoral
+            ctx.fillStyle = 'rgba(255,255,255,0.5)';
+            ctx.beginPath();
+            const finW = Math.sin(time * 0.2) * 5;
+            ctx.ellipse(0, 5, 8, Math.abs(3 + finW), Math.PI/4, 0, Math.PI*2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    class Shrimp {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = height - (10 + Math.random() * 30);
+            this.size = 8 + Math.random() * 4;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.color = '#ff4444';
+            this.timer = 0;
+        }
+        update() {
+            this.timer++;
+            if (this.timer > 100) {
+                this.timer = 0;
+                if (Math.random() < 0.6) this.vx = (Math.random() - 0.5) * 0.5;
+                else if (Math.random() < 0.8) this.vx = 0;
+                else { this.y -= 20; this.vx = (Math.random() - 0.5) * 2; }
+            }
+            if (this.y < height - 20) this.y += 0.5;
+            this.x += this.vx;
+            if (this.x < 0) this.x = width;
+            if (this.x > width) this.x = 0;
+        }
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            if (this.vx < 0) ctx.scale(-1, 1);
+            ctx.fillStyle = this.color;
+            for(let i=0; i<5; i++) {
+                ctx.beginPath();
+                let yOffset = -Math.sin(i/5 * Math.PI) * 5;
+                ctx.arc(i*4, yOffset, this.size/2 - (i*0.5), 0, Math.PI*2);
+                ctx.fill();
+            }
+            ctx.strokeStyle = 'rgba(255, 100, 100, 0.8)';
+            ctx.lineWidth = 1;
+            for(let i=0; i<6; i++) {
+                let legY = 5; if (Math.floor(time * 0.5) % 2 === 0) legY -= 2;
+                ctx.beginPath(); ctx.moveTo(i*3, 0); ctx.lineTo(i*3 - 2, legY); ctx.stroke();
+            }
+            ctx.beginPath(); ctx.moveTo(15, -2); ctx.quadraticCurveTo(25, -10, 30, -5); ctx.stroke();
+            ctx.restore();
+        }
+    }
+
+    class Bubble {
+        constructor(x, y, fromPlant = false) {
+            this.x = x || Math.random() * width;
+            this.y = y || height + 10;
+            this.r = 1 + Math.random() * 3;
+            this.speed = 1 + Math.random() * 2;
+            this.oscillation = Math.random() * 10;
+            this.fromPlant = fromPlant;
+        }
+        update() {
+            this.y -= this.speed;
+            this.x += Math.sin(this.y * 0.05 + this.oscillation) * 0.5;
+            if (this.y < -10) {
+                if (this.fromPlant) return false;
+                this.y = height + 10; this.x = Math.random() * width;
+            }
+            return true;
+        }
+        draw() {
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.beginPath(); ctx.arc(this.x - this.r*0.3, this.y - this.r*0.3, this.r*0.2, 0, Math.PI*2); ctx.fill();
+        }
+    }
+
+    class Flake {
+        constructor(x, y) {
+            this.x = x; this.y = y;
+            this.vx = (Math.random() - 0.5); this.vy = 0.5 + Math.random();
+            this.size = 3; this.color = Math.random() > 0.5 ? '#d48c48' : '#8c5648';
+        }
+        update() {
+            this.y += this.vy; this.x += Math.sin(this.y * 0.1) * 0.5;
+            return this.y <= height - 5;
+        }
+        draw() {
+            ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+        }
+    }
+
+    // PLANTAS
+    function initPlants() {
+        plants.vallisneria = []; plants.montecarlo = []; plants.ludwigia = []; plants.anubias = [];
+        // Vallisnerias
+        const vallisCount = Math.floor(width / 20);
+        for(let i = 0; i < vallisCount; i++) {
+            plants.vallisneria.push({
+                x: i * 20 + (Math.random()*10), height: height * 0.6 + Math.random() * (height*0.3),
+                width: 8 + Math.random() * 5, color: `hsl(${100 + Math.random()*40}, 60%, ${30 + Math.random()*20}%)`,
+                offset: Math.random() * 100
+            });
+        }
+        // Ludwigia
+        for(let i=0; i<5; i++) {
+            let clusterX = Math.random() * width;
+            for(let j=0; j<8; j++) {
+                plants.ludwigia.push({
+                    x: clusterX + (Math.random()-0.5)*60, height: 150 + Math.random() * 200, offset: Math.random()*100
+                });
+            }
+        }
+        // Anubias
+        for(let i=0; i<4; i++) plants.anubias.push({ x: Math.random() * width, y: height - 20, size: 40 + Math.random() * 30, leaves: 5 + Math.floor(Math.random()*3) });
+        // Montecarlo
+        const carpetDensity = width / 3; 
+        for(let i=0; i<carpetDensity; i++) plants.montecarlo.push({ x: Math.random() * width, y: height - (Math.random() * 15), r: 2 + Math.random() * 3, color: `hsl(${90 + Math.random()*30}, 70%, ${40 + Math.random()*20}%)` });
+    }
+
+    function drawEnvironment() {
+        // Fondo
+        let gradient = ctx.createLinearGradient(0, 0, 0, height);
+        gradient.addColorStop(0, "#2b6cb0"); gradient.addColorStop(1, "#1a365d");
+        ctx.fillStyle = gradient; ctx.fillRect(0, 0, width, height);
+        // Rayos
+        ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        for(let i=0; i<5; i++) {
+            let x = (time * 0.5 + i * 200) % (width + 200) - 100;
+            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 100, height); ctx.lineTo(x + 50, height); ctx.lineTo(x - 50, 0); ctx.fill();
+        }
+        ctx.restore();
+        // Vallisnerias
+        plants.vallisneria.forEach(p => {
+            ctx.strokeStyle = p.color; ctx.lineWidth = p.width; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(p.x, height);
+            let sway = Math.sin(time * 0.02 + p.offset) * 30; let sway2 = Math.sin(time * 0.03 + p.offset) * 50;
+            ctx.bezierCurveTo(p.x + sway, height - p.height/2, p.x + sway2, height - p.height * 0.8, p.x + sway + sway2, height - p.height);
+            ctx.stroke();
+        });
+        // Ludwigia
+        plants.ludwigia.forEach(p => {
+            ctx.strokeStyle = '#5d1a1a'; ctx.lineWidth = 3;
+            let sway = Math.sin(time * 0.02 + p.offset) * 15; let tipX = p.x + sway; let startY = height - 20; let endY = startY - p.height;
+            ctx.beginPath(); ctx.moveTo(p.x, startY); ctx.quadraticCurveTo(p.x, (startY + endY)/2, tipX, endY); ctx.stroke();
+            for(let i=0; i<10; i++) {
+                let progress = i / 10; let ly = startY - (progress * p.height); let lx = p.x + (sway * progress);
+                ctx.fillStyle = `hsl(${340 + Math.random()*20}, 60%, 50%)`; if(Math.random() > 0.7) ctx.fillStyle = '#556b2f';
+                ctx.beginPath(); ctx.ellipse(lx - 8, ly, 8, 4, Math.PI/6, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.ellipse(lx + 8, ly, 8, 4, -Math.PI/6, 0, Math.PI*2); ctx.fill();
+            }
+        });
+        // Suelo
+        ctx.fillStyle = "#3e2723"; ctx.fillRect(0, height - 30, width, 30);
+        plants.montecarlo.forEach(p => { ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); });
+        // Anubias
+        plants.anubias.forEach(p => {
+            ctx.fillStyle = '#2e3b28'; ctx.beginPath(); ctx.arc(p.x, height - 10, 15, 0, Math.PI, true); ctx.fill();
+            for(let i=0; i<p.leaves; i++) {
+                let angle = -Math.PI/2 + (i - p.leaves/2) * 0.5 + Math.sin(time*0.01 + p.x)*0.1; let length = p.size;
+                let leafX = p.x + Math.cos(angle) * length; let leafY = (height-10) + Math.sin(angle) * length;
+                ctx.strokeStyle = '#3a4d31'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(p.x, height-10); ctx.lineTo(leafX, leafY); ctx.stroke();
+                ctx.fillStyle = '#1b4d1b'; ctx.beginPath(); ctx.ellipse(leafX, leafY, 15, 25, angle + Math.PI/2, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#2b6d2b'; ctx.beginPath(); ctx.ellipse(leafX, leafY, 5, 15, angle + Math.PI/2, 0, Math.PI*2); ctx.fill();
+            }
+        });
+    }
+
+    function animate() {
+        time++;
+        ctx.clearRect(0, 0, width, height);
+        drawEnvironment();
+
+        for (let i = flakes.length - 1; i >= 0; i--) {
+            flakes[i].draw();
+            if (!flakes[i].update()) flakes.splice(i, 1);
+        }
+        fishes.forEach(fish => { fish.update(); fish.draw(); });
+        shrimps.forEach(shrimp => { shrimp.update(); shrimp.draw(); });
+
+        if (Math.random() < 0.1) bubbles.push(new Bubble());
+        if (Math.random() < 0.05) bubbles.push(new Bubble(Math.random() * width, height - 50, true));
+        for (let i = bubbles.length - 1; i >= 0; i--) {
+            bubbles[i].draw();
+            if (!bubbles[i].update()) bubbles.splice(i, 1);
+        }
+        requestAnimationFrame(animate);
+    }
+
+    function init() {
+        resize();
+        for(let i=0; i<6; i++) fishes.push(new Fish());
+        for(let i=0; i<12; i++) shrimps.push(new Shrimp());
+        animate();
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+        if(modal.style.display === 'flex') return; // No echar comida si la carta está abierta
+        for(let i=0; i<5; i++) flakes.push(new Flake(e.clientX + (Math.random()-0.5)*20, e.clientY));
+    });
+    canvas.addEventListener('touchstart', (e) => {
+        if(modal.style.display === 'flex') return;
+        for(let i=0; i<5; i++) flakes.push(new Flake(e.touches[0].clientX + (Math.random()-0.5)*20, e.touches[0].clientY));
+    });
+
+    init();
+
+</script>
+</body>
+</html>
